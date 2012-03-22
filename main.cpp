@@ -5,9 +5,6 @@
 
 //myincludes
 
-//UnDOTHIS CHANGE LATERTHISIS A TEST
-//LALALLA
-
 //contains the dot class
 #include "dot.h"
 //contains basic function like drawing grapics and loading images
