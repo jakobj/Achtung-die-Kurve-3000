@@ -45,7 +45,7 @@ int main(int argc,char* args[]){
   //start them both upon starting the program
   //the update timer isnt used at the moment
   //fps.start();
-  update.start();
+  //  update.start();
   //loop this until the user requests to quit the program
   while(quit == false){
     fps.start();
