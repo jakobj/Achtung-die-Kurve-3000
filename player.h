@@ -84,5 +84,4 @@ bool Player::is_set(){
   }
 }
 
-
 #endif

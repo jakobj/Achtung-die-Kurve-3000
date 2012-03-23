@@ -1,8 +1,3 @@
-//BUGS
-//-sometimes its just shows a white screen on startup, sometimes it just works
-
-
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <string>
@@ -60,7 +55,7 @@ int main(int argc,char* args[]){
   //this vector holds all players
   std::vector<Player> player;
   Player player1;
-  Player Player2;
+  Player player2;
   bool settingup;
   //create a dotclass member
   Dot myDot;
