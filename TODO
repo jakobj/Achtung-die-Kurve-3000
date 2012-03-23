@@ -1,0 +1,18 @@
+##################
+#####TODO:
+##################
+
+Player class
+|-> Snake class
+
+Playing field
+|->Power Up class
+|->Wall class
+|->Points/Generalinformation
+
+Collision detection
+
+Startup screen
+|->Player selection/key selection
+
+Exit screen
