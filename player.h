@@ -29,6 +29,7 @@ class Player{
   void handleinput(SDL_Event);
   void setup(SDL_Surface*,SDL_Event);
   bool is_set();
+  char* getkey(std::string);
   //void addpowerup(Powerup);
 };
 
@@ -47,7 +48,7 @@ void Player::setup(SDL_Surface* screen,SDL_Event event){
   buff.clear();
   SDL_EnableUNICODE(SDL_ENABLE);
   if(keyleft_set == false){
-    print_message("Select \'Left\' key",screen,340,240,{0,255,0},60);
+    print_message("Select \'Left\' key",screen,340,240,60);
     if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
       keyleft = event.key.keysym.sym;
       keyleft_set = true;
@@ -56,7 +57,7 @@ void Player::setup(SDL_Surface* screen,SDL_Event event){
     }
   }
   else if(keyright_set == false){
-    print_message("Select \'Right\' key",screen,340,240,{0,255,0},60);
+    print_message("Select \'Right\' key",screen,340,240,60);
     if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
       keyright = event.key.keysym.sym;
       keyright_set = true;
@@ -65,7 +66,7 @@ void Player::setup(SDL_Surface* screen,SDL_Event event){
     }
   }
   else if(keyfire_set == false){
-    print_message("Select \'Fire\' key",screen,340,240,{0,255,0},60);
+    print_message("Select \'Fire\' key",screen,340,240,60);
     if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
       keyfire = event.key.keysym.sym;
       keyfire_set = true;
@@ -73,6 +74,8 @@ void Player::setup(SDL_Surface* screen,SDL_Event event){
       keyfire_c=buff[0];
     }
   }
+  //IF we disable here we can not display anything anymore!! ?????
+  //SDL_EnableUNICODE(SDL_DISABLE);
 }
 
 bool Player::is_set(){
@@ -81,6 +84,18 @@ bool Player::is_set(){
   }
   else{
     return false;
+  }
+}
+
+char* Player::getkey(std::string dir){
+  if(dir == "left"){
+    return &keyleft_c;
+  }
+  if(dir == "right"){
+    return &keyright_c;
+  }
+  if(dir == "fire"){
+    return &keyfire_c;
   }
 }
 

@@ -3,3 +3,4 @@
 ##################
 
 -change screen resolution to 800x600
+-using global variables to figure out what to do next, bad???

@@ -16,8 +16,8 @@
 #include <string>
 
 //set constants for the screen
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 const int SCREEN_BPP = 32; //(Bit Per Pixel)
 const int FRAMES_PER_SECOND = 30;
 
@@ -61,9 +61,10 @@ void apply_surface(int x,int y,SDL_Surface *source,SDL_Surface *dest,
   SDL_BlitSurface(source,clip,dest,&offset);
 }
 
-void print_message(std::string msg,SDL_Surface* screen,int x,int y,SDL_Color textcolor,int size=20){
+void print_message(std::string msg,SDL_Surface* screen,int x,int y,int size=20){
   TTF_Font* font=TTF_OpenFont("./adkfont.ttf",size);
   SDL_Surface* message = NULL;
+  SDL_Color textcolor={0,0,0};
   message = TTF_RenderText_Solid(font,msg.c_str(),textcolor);
   apply_surface(x,y,message,screen);
 }

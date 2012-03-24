@@ -14,7 +14,7 @@
 //contains the timer class which is used to measure/fix the framerate
 #include "timer.h"
 //contains the startscreen with keyselection
-#include "startscreen.h"
+//#include "startscreen.h"
 //contains the player class
 #include "player.h"
 
@@ -44,8 +44,12 @@ int main(int argc,char* args[]){
   //game is not started
   bool game = false;
   //load font
-  TTF_Font* font;
+  TTF_Font* font = NULL;
   font = TTF_OpenFont("./adkfont.ttf",20);
+  if(font == NULL){
+    printf("Error.main.cpp:could not load font.\n");
+    return 1;
+  }
   //startscreen basic setup
   SDL_Surface* background = NULL;
   background = load_image("./background.png");
@@ -56,7 +60,8 @@ int main(int argc,char* args[]){
   std::vector<Player> player;
   Player player1;
   Player player2;
-  bool settingup;
+  bool settingup = false;
+  bool header = false;
   //create a dotclass member
   Dot myDot;
   //whether to cap the framerate
@@ -113,14 +118,20 @@ int main(int argc,char* args[]){
           //setup second player
           }*/
         }
+        header = false;
       }
-      if(settingup == false){
-        printf("not setting up\n");
+      if(settingup == false && header == false){
         apply_surface(0,0,background,screen);
-        print_message("Achtung die Kurve 3000",screen,30,30,{255,0,0},80);
-        print_message("Select player and keys",screen,50,100,{255,0,0},60);
-        print_message("Press 1 or 2 to select player",screen,55,170,
-                      {255,0,0},60);
+        print_message("Achtung die Kurve 3000",screen,30,30,60);
+        print_message("Select player and keys",screen,50,100,40);
+        print_message("Press 1 or 2 to select player",screen,55,170,30);
+        if(player1.is_set() == true){
+          print_message("1",screen,40,250);
+          printf(player1.getkey("left"));
+          print_message(player1.getkey("left"),screen,80,250);
+          print_message(player1.getkey("right"),screen,120,250);
+        }
+        header = true;
       }
     }
     //redraw the screen so that changes become visible
