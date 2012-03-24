@@ -2,11 +2,11 @@
 #include <SDL/SDL_image.h>
 #include <string>
 #include <iostream>
+#include <stdio.h>
+
+
 
 //myincludes
-
-//UnDOTHIS CHANGE LATERTHISIS A TEST
-//LALALLA
 
 //contains the dot class
 #include "dot.h"
@@ -17,6 +17,7 @@
 #include "timer.h"
 
 int main(int argc,char* args[]){
+  
   //the screen where everything else is drawn on
   SDL_Surface* screen;
   //eventcontainer used to handle inputs
@@ -35,8 +36,10 @@ int main(int argc,char* args[]){
   //fill the screen white
   SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                     0xFF,0xFF));
-  //create a dotclass member
-  Dot myDot;
+  //create and initialize two dotclass members
+  Dot myDot1;
+  Dot myDot2;
+ 
   //whether to cap the framerate
   bool cap = true;
   //these timers are used to measure/fix framerate
@@ -46,29 +49,50 @@ int main(int argc,char* args[]){
   //start them both upon starting the program
   //the update timer isnt used at the moment
   //fps.start();
-  //  update.start();
+  update.start();
+
+  // number of cycles
+  int i=0;
+  
+
   //loop this until the user requests to quit the program
   while(quit == false){
     fps.start();
     //loop through captured events
     while(SDL_PollEvent(&event)){
       //let dotclass handle the events
-      myDot.handle_input(event);
+      myDot1.handle_input(event);
+      myDot2.handle_input(event);
       //if the user wants to exit, set quit to true, such that the loop ends
       if(event.type == SDL_QUIT){
         quit = true;
       }
     }
-    //move the dot to new positions depending on old postition and velocity
-    myDot.move();
+    
+    //  store actual position   
+    myDot1.store_path(i);
+    // move dot
+    myDot1.move();
+    // check if new posotion collides with old ones
+    myDot1.check_collision(&myDot1.path_array[0][0],&myDot2.path_array[0][0],i);
+    
+    // same for dot 2
+    myDot2.store_path(i);    
+    myDot2.move();
+    myDot2.check_collision(&myDot1.path_array[0][0],&myDot2.path_array[0][0],i);
+    
+  
+    
+    
+    
     //draw the whole screen white otherwise the dot image leaves a trail
     //since its old positions dont get deleted
     //(which is kind off what we want in the end!)
-    SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
-                                                        0xFF,0xFF));
+    //SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
+    //                                                    0xFF,0xFF));
 
     //###########ignore this part for the moment###############
-      /*      if(keystates[SDLK_UP]){
+            /*if(keystates[SDLK_UP]){
         apply_surface((SCREEN_WIDTH-upMessage->w)/2,
                       (SCREEN_HEIGHT/2-upMessage->h)/2,upMessage,screen);
       }
@@ -87,8 +111,9 @@ int main(int argc,char* args[]){
                       }*/
     //#############unignore###################################
 
-    //paint the dot at its new positions on the screen
-    myDot.show(screen);
+    //paint the dot at its #include <math.h>nnew positions on the screen
+    myDot1.show(screen);
+    myDot2.show(screen);
     //redraw the screen so that all changes get visible
     SDL_Flip(screen);
     //#######next line is not used at the moment
@@ -98,6 +123,9 @@ int main(int argc,char* args[]){
     if((cap=true) && (fps.get_ticks() < 1000 / FRAMES_PER_SECOND)){
       SDL_Delay((1000/FRAMES_PER_SECOND)-fps.get_ticks());
     }
+
+  //count cycles
+  i++;
   }
   //before quitting call SDL_Quit() to let the SDL library exit and clean up
   //properly

@@ -18,7 +18,7 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32; //(Bit Per Pixel)
-const int FRAMES_PER_SECOND = 30;
+const int FRAMES_PER_SECOND = 60;
 
 //this function loads the image which is passed via filename in an optimized
 //version for the screen.
