@@ -41,33 +41,47 @@ int main(int argc,char* args[]){
   //fill the screen white
   SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                     0xFF,0xFF));
-  //  SDL_EnableUNICODE(SDL_ENABLE);
   //game is not started
   bool game = false;
   //load font
   TTF_Font* font = NULL;
   font = TTF_OpenFont("./adkfont.ttf",20);
   if(font == NULL){
-    printf("Error.main.cpp:could not load font.\n");
+    printf("Error:main.cpp:could not load font.\n");
     return 1;
   }
   //startscreen basic setup
   SDL_Surface* background = NULL;
   background = load_image("./background.png");
   if(background == NULL){
-    printf("Error.main:load background image\n");
+    printf("Error:main.cpp:could not load background image.\n");
   }
-  //this vector holds all players
-  std::vector<Player> player;
+  //this vector holds all players (in the future ;) )
+  //  std::vector<Player> player;
   Player player1;
   player1.id=1;
   Player player2;
   player2.id=2;
-  bool settingup = false;
-  bool header = false;
-  std::string buff = "";
-  //create a dotclass member
-  //  Dot myDot;
+  //rect that defines the playing field
+  SDL_Rect field;
+  field.x=0;
+  field.y=0;
+  field.h=SCREEN_HEIGHT;
+  field.w=SCREEN_HEIGHT;
+  //seperates field from the other part
+  SDL_Rect sep;
+  sep.x=field.w;
+  sep.y=0;
+  sep.w=8;
+  sep.h=SCREEN_HEIGHT;
+  //display of statistics and stuff
+  SDL_Rect stat;
+  stat.x=field.w+sep.w;
+  stat.y=0;
+  stat.w=SCREEN_WIDTH-field.w-sep.w;
+  stat.h=SCREEN_HEIGHT;
+  //to pause the game press space
+  bool pause = false;
   //whether to cap the framerate
   bool cap = true;
   //these timers are used to measure/fix framerate
@@ -76,8 +90,7 @@ int main(int argc,char* args[]){
   int frame;
   //start them both upon starting the program
   //the update timer isnt used at the moment
-  //  fps.start();
-  //  update.start();
+  //update.start();
   //loop this until the user requests to quit the program
   while(quit == false){
     if(game == true){
@@ -85,31 +98,56 @@ int main(int argc,char* args[]){
       //loop through captured events
       while(SDL_PollEvent(&event)){
         //let dotclass handle the events
-        //THIS WORKS VERY WELL
-        player1.dot.handle_input(event);
-        player2.dot.handle_input(event);
+        if(pause == false){
+          player1.dot.handle_input(event);
+          player2.dot.handle_input(event);
+        }
         //if the user wants to exit, set quit to true, such that the loop ends
         if(event.type == SDL_QUIT){
           quit = true;
         }
+        if(event.type == SDL_KEYDOWN){
+          if(event.key.keysym.sym == SDLK_ESCAPE){
+            game = false;
+          }
+          if(event.key.keysym.sym == SDLK_SPACE){
+            if(pause == false){
+              print_message("PAUSED",screen,150,240,100);
+              pause = true;
+            }
+            else{
+              pause = false;
+            }
+          }
+        }
       }
-      player1.handleinput();
-      player2.handleinput();
-      //move the dot to new positions depending on old postition and velocity
-      player1.dot.move();
-      player2.dot.move();
-      //draw the whole screen white otherwise the dot image leaves a trail
-      //since its old positions dont get deleted
-      //(which is kind off what we want in the end!)
-      SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
-                                                        0xFF,0xFF));
-      //paint the dot at its new positions on the screen
-      player1.dot.show(screen);
-      player2.dot.show(screen);
-      //#######next line is not used at the moment
-      //frame++;
+      if(pause == false){
+        //THIS WORKS VERY WELL WITH KEYSTATES!!
+        if(player1.is_set() == true){
+          player1.handleinput();
+        }
+        if(player2.is_set() == true){
+          player2.handleinput();
+        }
+        //move the dot to new positions depending on old postition and velocity
+        player1.dot.move();
+        player2.dot.move();
+        //draw the whole screen white otherwise the dot image leaves a trail
+        //since its old positions dont get deleted
+        //(which is kind off what we want in the end!)
+        SDL_FillRect(screen,&field,SDL_MapRGB(screen->format,0xFF,
+                                              0xFF,0x00));
+        SDL_FillRect(screen,&sep,SDL_MapRGB(screen->format,0x00,
+                                            0x00,0x00));
+        SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
+        //paint the dot at its new positions on the screen
+        player1.dot.show(screen);
+        player2.dot.show(screen);
+        //#######next line is not used at the moment
+        //frame++;
+      }
     }
-    else if (game == false){
+      else if (game == false){
       while(SDL_PollEvent(&event)){
         if(event.type == SDL_QUIT){
           quit = true;
@@ -117,7 +155,8 @@ int main(int argc,char* args[]){
         apply_surface(0,0,background,screen);
         print_message("Achtung die Kurve 3000",screen,30,30,60);
         print_message("Select player and keys",screen,50,100,40);
-        print_message("Press 1 or 2 to select player",screen,55,170,30);
+        print_message("Press 1 or 2 to select player, SPACE to start",
+                      screen,55,170,30);
         if(event.type == SDL_KEYDOWN){
           if(event.key.keysym.sym == SDLK_1){
             player1.setup(screen);
@@ -128,25 +167,10 @@ int main(int argc,char* args[]){
           if(event.key.keysym.sym == SDLK_SPACE){
             game = true;
           }
-          if(event.key.keysym.sym == player1.getkey("left")){
-            printf("yes ur pressing left!!\n");
-          }
         }
-        //display settings for player 1
+        //display settings for the players
         player1.displaysettings(screen);
         player2.displaysettings(screen);
-        /*if(player1.is_set() == true){
-          print_message("1",screen,40,250);
-          buff.clear();
-          buff+=player1.getkey("left");
-          print_message(buff,screen,80,250);
-          buff.clear();
-          buff+=player1.getkey("right");
-          print_message(buff,screen,110,250);
-          buff.clear();
-          buff+=player1.getkey("fire");
-          print_message(buff,screen,140,250);
-        }*/
       }
     }
     //redraw the screen so that changes become visible
