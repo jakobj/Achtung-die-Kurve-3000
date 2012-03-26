@@ -8,7 +8,7 @@
 #include "basic.h"
 
 class Player{
- private:
+ public:
   int points;
   SDLKey keyright;
   SDLKey keyleft;
@@ -19,9 +19,10 @@ class Player{
   char keyleft_c;
   char keyright_c;
   char keyfire_c;
+  bool settingup;
   //Snake plsnake;
   //vector<Powerup> plpowerup;
- public:
+  // public:
   Player();
   ~Player();
   void change_points(int);
@@ -29,7 +30,7 @@ class Player{
   void handleinput(SDL_Event);
   void setup(SDL_Surface*,SDL_Event);
   bool is_set();
-  char* getkey(std::string);
+  char getkey(std::string);
   //void addpowerup(Powerup);
 };
 
@@ -46,7 +47,6 @@ void Player::setup(SDL_Surface* screen,SDL_Event event){
   printf("setting up first player!\n");
   std::string buff;
   buff.clear();
-  SDL_EnableUNICODE(SDL_ENABLE);
   if(keyleft_set == false){
     print_message("Select \'Left\' key",screen,340,240,60);
     if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
@@ -87,15 +87,15 @@ bool Player::is_set(){
   }
 }
 
-char* Player::getkey(std::string dir){
+char Player::getkey(std::string dir){
   if(dir == "left"){
-    return &keyleft_c;
+    return keyleft_c;
   }
   if(dir == "right"){
-    return &keyright_c;
+    return keyright_c;
   }
   if(dir == "fire"){
-    return &keyfire_c;
+    return keyfire_c;
   }
 }
 
