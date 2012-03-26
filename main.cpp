@@ -111,7 +111,7 @@ int main(int argc,char* args[]){
         print_message("Achtung die Kurve 3000",screen,30,30,60);
         print_message("Select player and keys",screen,50,100,40);
         print_message("Press 1 or 2 to select player",screen,55,170,30);
-        if(player1.settingup == true){
+        /*g        if(player1.settingup == true){
           buff.clear();
           if(player1.keyleft_set == false){
             print_message("Select \'Left\' key",screen,340,240,60);
@@ -154,15 +154,17 @@ int main(int argc,char* args[]){
           if(player1.is_set() == true){
             player1.settingup = false;
           }
-        }
+          }*/
         if(event.type == SDL_KEYDOWN){
           if(event.key.keysym.sym == SDLK_1){
-            player1.settingup = true;
+            //            player1.settingup = true;
+            player1.setup(screen);
           }
           if(event.key.keysym.sym == player1.keyleft){
             printf("yeasegaealeeft\n");
           }
         }
+        //display settings for player 1
         if(player1.is_set() == true){
           print_message("1",screen,40,250);
           buff.clear();
