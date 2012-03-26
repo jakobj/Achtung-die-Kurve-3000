@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stdio.h>
 
-//myincludes
 
 //contains the dot class
 #include "dot.h"
@@ -19,6 +19,7 @@
 #include "player.h"
 
 int main(int argc,char* args[]){
+  
   //the screen where everything else is drawn on
   SDL_Surface* screen;
   //eventcontainer used to handle inputs
@@ -82,6 +83,7 @@ int main(int argc,char* args[]){
   stat.h=SCREEN_HEIGHT;
   //to pause the game press space
   bool pause = false;
+
   //whether to cap the framerate
   bool cap = true;
   //these timers are used to measure/fix framerate
@@ -90,6 +92,9 @@ int main(int argc,char* args[]){
   int frame;
   //start them both upon starting the program
   //the update timer isnt used at the moment
+
+  //used with collision detection
+  int i;
   //update.start();
   //loop this until the user requests to quit the program
   while(quit == false){
@@ -98,10 +103,10 @@ int main(int argc,char* args[]){
       //loop through captured events
       while(SDL_PollEvent(&event)){
         //let dotclass handle the events
-        if(pause == false){
+        /*if(pause == false){
           player1.dot.handle_input(event);
           player2.dot.handle_input(event);
-        }
+          }*/
         //if the user wants to exit, set quit to true, such that the loop ends
         if(event.type == SDL_QUIT){
           quit = true;
@@ -122,21 +127,26 @@ int main(int argc,char* args[]){
         }
       }
       if(pause == false){
-        //THIS WORKS VERY WELL WITH KEYSTATES!!
         if(player1.is_set() == true){
           player1.handleinput();
         }
         if(player2.is_set() == true){
           player2.handleinput();
         }
+        //store path for collision detection
+        player1.dot.store_path(i);
+        player2.dot.store_path(i);
         //move the dot to new positions depending on old postition and velocity
         player1.dot.move();
         player2.dot.move();
+        //check whether a collision happened
+        //player1.dot.check_collision(&player1.dot.path_array[0][0],
+        //                     &player2.dot.path_array[0][0],i);
         //draw the whole screen white otherwise the dot image leaves a trail
         //since its old positions dont get deleted
         //(which is kind off what we want in the end!)
         SDL_FillRect(screen,&field,SDL_MapRGB(screen->format,0xFF,
-                                              0xFF,0x00));
+                                            0xFF,0x00));
         SDL_FillRect(screen,&sep,SDL_MapRGB(screen->format,0x00,
                                             0x00,0x00));
         SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
@@ -147,7 +157,7 @@ int main(int argc,char* args[]){
         //frame++;
       }
     }
-      else if (game == false){
+    else if (game == false){
       while(SDL_PollEvent(&event)){
         if(event.type == SDL_QUIT){
           quit = true;
@@ -173,13 +183,15 @@ int main(int argc,char* args[]){
         player2.displaysettings(screen);
       }
     }
-    //redraw the screen so that changes become visible
     SDL_Flip(screen);
     //this caps the framerate to FRAMES_PER_SECOND so that it runs at the same
     //speed on every computer
     if((cap=true) && (fps.get_ticks() < 1000 / FRAMES_PER_SECOND)){
       SDL_Delay((1000/FRAMES_PER_SECOND)-fps.get_ticks());
     }
+    
+    //count cycles
+    i++;
   }
   //before quitting call SDL_Quit() to let the SDL library exit and clean up
   //properly

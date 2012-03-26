@@ -160,10 +160,10 @@ void Player::displaysettings(SDL_Surface* screen){
 void Player::handleinput(){
   Uint8 *keystates = SDL_GetKeyState(NULL);
   if(keystates[keyleft]){
-    dot.xvel-=0.2;
+    dot.phi-=2;
   }
   if(keystates[keyright]){
-    dot.xvel+=0.2;
+    dot.phi+=2;
   }
 }
 #endif
