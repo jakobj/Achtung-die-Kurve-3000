@@ -67,7 +67,7 @@ int main(int argc,char* args[]){
   bool header = false;
   std::string buff = "";
   //create a dotclass member
-  Dot myDot;
+  //  Dot myDot;
   //whether to cap the framerate
   bool cap = true;
   //these timers are used to measure/fix framerate
@@ -85,21 +85,27 @@ int main(int argc,char* args[]){
       //loop through captured events
       while(SDL_PollEvent(&event)){
         //let dotclass handle the events
-        myDot.handle_input(event);
+        //THIS WORKS VERY WELL
+        player1.dot.handle_input(event);
+        player2.dot.handle_input(event);
         //if the user wants to exit, set quit to true, such that the loop ends
         if(event.type == SDL_QUIT){
           quit = true;
         }
       }
+      player1.handleinput();
+      player2.handleinput();
       //move the dot to new positions depending on old postition and velocity
-      myDot.move();
+      player1.dot.move();
+      player2.dot.move();
       //draw the whole screen white otherwise the dot image leaves a trail
       //since its old positions dont get deleted
       //(which is kind off what we want in the end!)
       SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                         0xFF,0xFF));
       //paint the dot at its new positions on the screen
-      myDot.show(screen);
+      player1.dot.show(screen);
+      player2.dot.show(screen);
       //#######next line is not used at the moment
       //frame++;
     }
@@ -118,6 +124,9 @@ int main(int argc,char* args[]){
           }
           if(event.key.keysym.sym == SDLK_2){
             player2.setup(screen);
+          }
+          if(event.key.keysym.sym == SDLK_SPACE){
+            game = true;
           }
           if(event.key.keysym.sym == player1.getkey("left")){
             printf("yes ur pressing left!!\n");

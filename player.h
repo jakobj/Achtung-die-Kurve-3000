@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "basic.h"
+#include "dot.h"
 
 class Player{
  private:
@@ -27,6 +28,7 @@ class Player{
   Player();
   ~Player();
   int id;
+  Dot dot;
   void change_points(int);
   int get_points();
   void handleinput(SDL_Event);
@@ -34,6 +36,7 @@ class Player{
   bool is_set();
   SDLKey getkey(std::string);
   void displaysettings(SDL_Surface*);
+  void handleinput();
   //void addpowerup(Powerup);
 };
 
@@ -153,4 +156,14 @@ void Player::displaysettings(SDL_Surface* screen){
   }
 }
 
+//handle input
+void Player::handleinput(){
+  Uint8 *keystates = SDL_GetKeyState(NULL);
+  if(keystates[keyleft]){
+    dot.xvel-=0.2;
+  }
+  if(keystates[keyright]){
+    dot.xvel+=0.2;
+  }
+}
 #endif

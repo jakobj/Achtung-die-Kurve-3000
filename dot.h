@@ -25,7 +25,7 @@ class Dot{
   //its position
   int x,y;
   //its velocity
-  int xvel,yvel;
+  //  int xvel,yvel;
   //the surface which is the basic object of the dot
   SDL_Surface* dot;
  public:
@@ -33,6 +33,7 @@ class Dot{
   Dot();
   //destructor
   //~Dot();
+  float xvel,yvel;
   //handle the inputs the program gets and passes to the dot object
   void handle_input(SDL_Event);
   //update the position of the dot
