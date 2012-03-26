@@ -41,7 +41,7 @@ int main(int argc,char* args[]){
   //fill the screen white
   SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                     0xFF,0xFF));
-  SDL_EnableUNICODE(SDL_ENABLE);
+  //  SDL_EnableUNICODE(SDL_ENABLE);
   //game is not started
   bool game = false;
   //load font
@@ -60,7 +60,9 @@ int main(int argc,char* args[]){
   //this vector holds all players
   std::vector<Player> player;
   Player player1;
+  player1.id=1;
   Player player2;
+  player2.id=2;
   bool settingup = false;
   bool header = false;
   std::string buff = "";
@@ -96,7 +98,6 @@ int main(int argc,char* args[]){
       //(which is kind off what we want in the end!)
       SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                         0xFF,0xFF));
-      
       //paint the dot at its new positions on the screen
       myDot.show(screen);
       //#######next line is not used at the moment
@@ -111,61 +112,21 @@ int main(int argc,char* args[]){
         print_message("Achtung die Kurve 3000",screen,30,30,60);
         print_message("Select player and keys",screen,50,100,40);
         print_message("Press 1 or 2 to select player",screen,55,170,30);
-        /*g        if(player1.settingup == true){
-          buff.clear();
-          if(player1.keyleft_set == false){
-            print_message("Select \'Left\' key",screen,340,240,60);
-            SDL_Flip(screen);
-            SDL_WaitEvent(&event);
-            if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
-              player1.keyleft = event.key.keysym.sym;
-              player1.keyleft_set = true;
-              buff=(char)event.key.keysym.unicode;
-              player1.keyleft_c=buff[0];
-              printf("playerkey set\n");
-              std::cout<<player1.keyleft_c<<" <- left"<<std::endl;
-            }
-          }
-          else if(player1.keyright_set == false){
-            print_message("Select \'Right\' key",screen,340,240,60);
-            SDL_Flip(screen);
-            SDL_WaitEvent(&event);
-            if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
-              player1.keyright = event.key.keysym.sym;
-              player1.keyright_set = true;
-              buff=(char)event.key.keysym.unicode;
-              player1.keyright_c=buff[0];
-              printf("playerkey set\n");
-              std::cout<<player1.keyright_c<<" <- right"<<std::endl;
-            }
-          }
-          else if(player1.keyfire_set == false){
-            print_message("Select \'Fire\' key",screen,340,240,60);
-            SDL_Flip(screen);
-            SDL_WaitEvent(&event);
-            if(event.key.keysym.sym != SDLK_1 && event.key.keysym.sym != SDLK_2){
-              player1.keyfire = event.key.keysym.sym;
-              player1.keyfire_set = true;
-              buff=(char)event.key.keysym.unicode;
-              player1.keyfire_c=buff[0];
-              std::cout<<player1.keyfire_c<<" <- right"<<std::endl;
-            }
-          }
-          if(player1.is_set() == true){
-            player1.settingup = false;
-          }
-          }*/
         if(event.type == SDL_KEYDOWN){
           if(event.key.keysym.sym == SDLK_1){
-            //            player1.settingup = true;
             player1.setup(screen);
           }
-          if(event.key.keysym.sym == player1.keyleft){
-            printf("yeasegaealeeft\n");
+          if(event.key.keysym.sym == SDLK_2){
+            player2.setup(screen);
+          }
+          if(event.key.keysym.sym == player1.getkey("left")){
+            printf("yes ur pressing left!!\n");
           }
         }
         //display settings for player 1
-        if(player1.is_set() == true){
+        player1.displaysettings(screen);
+        player2.displaysettings(screen);
+        /*if(player1.is_set() == true){
           print_message("1",screen,40,250);
           buff.clear();
           buff+=player1.getkey("left");
@@ -176,7 +137,7 @@ int main(int argc,char* args[]){
           buff.clear();
           buff+=player1.getkey("fire");
           print_message(buff,screen,140,250);
-        }
+        }*/
       }
     }
     //redraw the screen so that changes become visible

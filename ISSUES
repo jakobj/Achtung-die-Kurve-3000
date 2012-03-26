@@ -2,5 +2,15 @@
 #####ISSUES:
 ##################
 
--change screen resolution to 800x600
--using global variables to figure out what to do next, bad???
+-(maybe) using to much memory since were not freeing anything that gets painted onto the screen
+-make id of class player private, figure out a way to correctly assign the id automatically
+-not possible to select other keys than letters
+
+
+fixed unicode handling
+added a second player to test
+added function in player class which sets up the keyboard
+added function to properly display the settings for the player
+made (almost) all variable of player private again
+changed getkey to return the key.keysym.sym variable
+added comments to player class
