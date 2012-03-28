@@ -16,3 +16,13 @@ Game
 	->Walls
 	->Exit to welcome screen
 	->Game finished screen/message/Exit screen
+
+SPECIFIC:
+-get collision detection to work properly
+-display/count points for players
+-paint numbers on startup screen in different colors
+-repaint "the trail" of the dot on every screen update -> save positions and paint a dot there
+ 	|->find a way to paint the trail in a different color than the actual position
+-change dotsize to 5 pixel (possible to find THE middle pixel), change size of images
+-figure out a good standard speed for the snakes, add an option to change this
+-figure out a good standard radius for the snakes

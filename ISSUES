@@ -5,3 +5,4 @@
 -(maybe) using to much memory since were not freeing anything that gets painted onto the screen
 -make id of class player private, figure out a way to correctly assign the id automatically
 -not possible to select other keys than letters
+-make dot class variables private

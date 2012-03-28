@@ -25,7 +25,7 @@ class Player{
   //Snake plsnake;
   //vector<Powerup> plpowerup;
  public:
-  Player();
+  Player(std::string);
   ~Player();
   int id;
   Dot dot;
@@ -40,11 +40,12 @@ class Player{
   //void addpowerup(Powerup);
 };
 
-Player::Player(){
+Player::Player(std::string color){
   points = 0;
   keyright_set = false;
   keyleft_set = false;
   keyfire_set = false;
+  dot.setcolor(color);
 }
 
 Player::~Player(){}

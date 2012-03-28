@@ -14,7 +14,8 @@
 #include <SDL/SDL_image.h>
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
+//#include <time.h>
+#include <string>
 
 
 #define sqr(x) ((x)*(x))
@@ -31,16 +32,15 @@
 //define the size of the dot on the screen
 //IMPORTANT: this does not define the size of the image, but the size of
 //the container which the program counts as belonging to the dot.
-const int DOT_HEIGHT = 15;
-const int DOT_WIDTH = 15;
+const int DOT_HEIGHT = 1;
+const int DOT_WIDTH = 1;
 
 class Dot{														
   public:
   //its position
   float x,y;
   //its velocity
-  //  int xvel,yvel;
-          //float xvel,yvel;
+    float xvel,yvel;
   // angle of velocity vector
   int phi;
   // radius of velocity vector
@@ -51,37 +51,41 @@ class Dot{
   int path_array[5000][2];
   //the surface which is the basic object of the dot
   SDL_Surface* dot;
+  //rectangle defines area of the dot
+  SDL_Rect rect;
   //constructor
   Dot();
   //destructor
   //~Dot();
-  float xvel,yvel;
   //handle the inputs the program gets and passes to the dot object
   void handle_input(SDL_Event);
   //update the position of the dot
   void move();
   //draw the dot onto the surface which is passed to the function
   void show(SDL_Surface*);
-  
   //stores the actual position
   void store_path(int);
   // check if actual position collides with old ones
   void check_collision(int*,int*,int);
-  
-  
+  //set the color of the dot by loading the appropiate image
+  void setcolor(std::string);
 };
 
 //initialize the object,set random start values and load the image which shows the
 //position of the dot
-
 Dot::Dot(){
  x=rand()%640;
   y=200;
   alive=0;
-  xvel=5;
+  xvel=9;
   yvel=0;
   phi=0;
   dot = load_image("./dot.png");
+  /*if(color == "red"){
+    dot = load_image("./dotr.png");
+    }*/
+  rect.h=DOT_HEIGHT;
+  rect.w=DOT_WIDTH;
  }
 
 void Dot::store_path(int i){
@@ -95,14 +99,13 @@ void Dot::check_collision(int *path1,int *path2,int i){
     int fy=floor(y);
     int k=0;
     for(k=0;k<i;k++){
-    if(fx==*(path1+k) && fy==*(path1+k+1)){alive=1;}};
+      if(fx==*(path1+k) && fy==*(path1+k+1)){alive=1;}
+    }
     k=0;
     for(k=0;k<i;k++){
-    if(fx==*(path2+k) && fy==*(path2+k+1)){alive=1;}};
-  
+      if(fx==*(path2+k) && fy==*(path2+k+1)){alive=1;}
+    }
 }
-
-
 
 //Dot::~Dot(){}
 
@@ -129,7 +132,25 @@ void Dot::move(){
 
 //paint the dot onto the screen with the given offsets
 void Dot::show(SDL_Surface* screen){
-  apply_surface(x,y,dot,screen,NULL);
+  rect.x = x;
+  rect.y = y;
+  //fill the rect just to mark its position on the screen
+  SDL_FillRect(screen,&rect,SDL_MapRGB(screen->format,0x00,
+                                      0xFF,0x00));
+  //substract 3 from x,y so that these coordinates define point
+  //to the midpoint of the image
+  //probably smarter to use an odd value like 5 where you can
+  //actually define the middle pixel ;)
+  apply_surface(x-3,y-3,dot,screen,NULL);
+}
+
+void Dot::setcolor(std::string color){
+  if(color == "red"){
+    dot = load_image("./dotr.png");
+  }
+  if(color == "green"){
+    dot = load_image("./dotg.png");
+  }
 }
 
 #endif

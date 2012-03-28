@@ -59,9 +59,9 @@ int main(int argc,char* args[]){
   }
   //this vector holds all players (in the future ;) )
   //  std::vector<Player> player;
-  Player player1;
+  Player player1("red");
   player1.id=1;
-  Player player2;
+  Player player2("green");
   player2.id=2;
   //rect that defines the playing field
   SDL_Rect field;
@@ -146,7 +146,7 @@ int main(int argc,char* args[]){
         //since its old positions dont get deleted
         //(which is kind off what we want in the end!)
         SDL_FillRect(screen,&field,SDL_MapRGB(screen->format,0xFF,
-                                            0xFF,0x00));
+                                              0xFF,0xFF));
         SDL_FillRect(screen,&sep,SDL_MapRGB(screen->format,0x00,
                                             0x00,0x00));
         SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));

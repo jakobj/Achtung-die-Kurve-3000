@@ -38,7 +38,7 @@ SDL_Surface *load_image(std::string filename){
     //colorkey is the color which is ignored in the final image
     //e.g. if we have a black dot on a white background we would have
     //0xFF,0xFF,0xFF in SDL_MapRGB
-    Uint32 colorkey = SDL_MapRGB(optimizedImage->format,0,0xFF,0xFF);
+    Uint32 colorkey = SDL_MapRGB(optimizedImage->format,0xFF,0xFF,0xFF);
     //now we set the colorkey for the image
     SDL_SetColorKey(optimizedImage,SDL_SRCCOLORKEY,colorkey);
     //finally we have to free the old image since it is not used anymore
