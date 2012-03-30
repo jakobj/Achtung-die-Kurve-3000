@@ -22,6 +22,8 @@ class Player{
   char keyright_c;
   char keyfire_c;
   bool settingup;
+  std::string color;
+  bool pointschanged;
   //Snake plsnake;
   //vector<Powerup> plpowerup;
  public:
@@ -29,7 +31,7 @@ class Player{
   ~Player();
   int id;
   Dot dot;
-  void change_points(int);
+  void changepoints(int);
   int get_points();
   void handleinput(SDL_Event);
   void setup(SDL_Surface*);
@@ -37,15 +39,18 @@ class Player{
   SDLKey getkey(std::string);
   void displaysettings(SDL_Surface*);
   void handleinput();
+  void displaypoints(SDL_Surface*,int);
   //void addpowerup(Powerup);
 };
 
-Player::Player(std::string color){
+Player::Player(std::string clr){
   points = 0;
   keyright_set = false;
   keyleft_set = false;
   keyfire_set = false;
+  color = clr;
   dot.setcolor(color);
+  pointschanged = true;
 }
 
 Player::~Player(){}
@@ -138,22 +143,22 @@ void Player::displaysettings(SDL_Surface* screen){
   //first we want to print the player id,
   //so we need to convert to char
   buff+=(char)((int)'0'+id);
-  print_message(buff,screen,40,210+id*40);
+  print_message(buff,screen,40,210+id*40,25,color);
   //then print alle the other keys (if they are set)
   if(keyleft_set == true){
     buff.clear();
     buff+=keyleft_c;
-    print_message(buff,screen,80,210+id*40);
+    print_message(buff,screen,80,212+id*40);
   }
   if(keyright_set == true){
     buff.clear();
     buff+=keyright_c;
-    print_message(buff,screen,110,210+id*40);
+    print_message(buff,screen,110,212+id*40);
   }
   if(keyfire_set == true){
     buff.clear();
     buff+=keyfire_c;
-    print_message(buff,screen,140,210+id*40);
+    print_message(buff,screen,140,212+id*40);
   }
 }
 
@@ -165,6 +170,46 @@ void Player::handleinput(){
   }
   if(keystates[keyright]){
     dot.phi+=2;
+  }
+}
+
+void Player::changepoints(int val){
+  points+=val;
+  pointschanged = true;
+}
+
+void Player::displaypoints(SDL_Surface* screen,int xoffset){
+  std::string buff;
+  SDL_Rect rect;
+  int pbuff;
+  int h=0,t=0;
+  if(pointschanged == true){
+    buff="Player ";
+    buff+=(char)((int)'0'+id);
+    print_message(buff,screen,xoffset-185,10+id*35,30,color);
+    buff.clear();
+    pbuff=points;
+    rect.x=xoffset-60;
+    rect.y=5+id*35;
+    rect.w=55;
+    rect.h=40;
+    if(pbuff<10){
+      buff+=(char)((int)'0'+points);
+    }
+    else if(pbuff>=10 && pbuff<100){
+      while(pbuff>=10){
+        t++;
+        pbuff-=10;
+      }
+      buff+=(char)((int)'0'+t);
+      buff+=(char)((int)'0'+pbuff);
+      rect.x-=17;
+      rect.w+=17;
+      xoffset-=17;
+    }
+    SDL_FillRect(screen,&rect,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
+    print_message(buff,screen,xoffset-40,10+id*35,30);
+    pointschanged = false;
   }
 }
 #endif

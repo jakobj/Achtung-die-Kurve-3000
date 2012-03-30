@@ -61,10 +61,22 @@ void apply_surface(int x,int y,SDL_Surface *source,SDL_Surface *dest,
   SDL_BlitSurface(source,clip,dest,&offset);
 }
 
-void print_message(std::string msg,SDL_Surface* screen,int x,int y,int size=20){
+void print_message(std::string msg,SDL_Surface* screen,int x,int y,int size=20,std::string color="black"){
   TTF_Font* font=TTF_OpenFont("./adkfont.ttf",size);
   SDL_Surface* message = NULL;
-  SDL_Color textcolor={0,0,0};
+  SDL_Color textcolor;
+  textcolor.r=0;
+  textcolor.g=0;
+  textcolor.b=0;
+  if(color == "red"){
+    textcolor.r=0xFF;
+  }
+  if(color == "green"){
+    textcolor.g=0xFF;
+  }
+  if(color == "blue"){
+    textcolor.b=0xFF;
+  }
   message = TTF_RenderText_Solid(font,msg.c_str(),textcolor);
   apply_surface(x,y,message,screen);
 }

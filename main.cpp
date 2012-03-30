@@ -38,7 +38,7 @@ int main(int argc,char* args[]){
   screen = SDL_SetVideoMode(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_BPP,
                             SDL_SWSURFACE);
   //set window caption
-  SDL_WM_SetCaption("Move that dot!",NULL);
+  SDL_WM_SetCaption("Achtung die Kurve 3000",NULL);
   //fill the screen white
   SDL_FillRect(screen,&screen->clip_rect,SDL_MapRGB(screen->format,0xFF,
                                                     0xFF,0xFF));
@@ -57,6 +57,7 @@ int main(int argc,char* args[]){
   if(background == NULL){
     printf("Error:main.cpp:could not load background image.\n");
   }
+
   //this vector holds all players (in the future ;) )
   //  std::vector<Player> player;
   Player player1("red");
@@ -83,7 +84,6 @@ int main(int argc,char* args[]){
   stat.h=SCREEN_HEIGHT;
   //to pause the game press space
   bool pause = false;
-
   //whether to cap the framerate
   bool cap = true;
   //these timers are used to measure/fix framerate
@@ -92,21 +92,16 @@ int main(int argc,char* args[]){
   int frame;
   //start them both upon starting the program
   //the update timer isnt used at the moment
-
   //used with collision detection
   int i;
   //update.start();
+
   //loop this until the user requests to quit the program
   while(quit == false){
     if(game == true){
       fps.start();
       //loop through captured events
       while(SDL_PollEvent(&event)){
-        //let dotclass handle the events
-        /*if(pause == false){
-          player1.dot.handle_input(event);
-          player2.dot.handle_input(event);
-          }*/
         //if the user wants to exit, set quit to true, such that the loop ends
         if(event.type == SDL_QUIT){
           quit = true;
@@ -123,6 +118,12 @@ int main(int argc,char* args[]){
             else{
               pause = false;
             }
+          }
+          if(event.key.keysym.sym == SDLK_u){
+            player1.changepoints(1);
+          }
+          if(event.key.keysym.sym == SDLK_o){
+            player2.changepoints(1);
           }
         }
       }
@@ -149,7 +150,10 @@ int main(int argc,char* args[]){
                                               0xFF,0xFF));
         SDL_FillRect(screen,&sep,SDL_MapRGB(screen->format,0x00,
                                             0x00,0x00));
-        SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
+        //        SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
+        //display points of players
+        player1.displaypoints(screen,stat.x+stat.w);
+        player2.displaypoints(screen,stat.x+stat.w);
         //paint the dot at its new positions on the screen
         player1.dot.show(screen);
         player2.dot.show(screen);
@@ -176,6 +180,11 @@ int main(int argc,char* args[]){
           }
           if(event.key.keysym.sym == SDLK_SPACE){
             game = true;
+            SDL_FillRect(screen,&field,SDL_MapRGB(screen->format,0xFF,
+                                                  0xFF,0xFF));
+            SDL_FillRect(screen,&sep,SDL_MapRGB(screen->format,0x00,
+                                                0x00,0x00));
+            SDL_FillRect(screen,&stat,SDL_MapRGB(screen->format,0xFF,0xFF,0x00));
           }
         }
         //display settings for the players

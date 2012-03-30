@@ -8,8 +8,6 @@
 #ifndef DOT_H
 #define DOT_H
 
-
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <math.h>
@@ -53,12 +51,15 @@ class Dot{
   SDL_Surface* dot;
   //rectangle defines area of the dot
   SDL_Rect rect;
+  //clip is used to define color of the dot by loading the specific area of the
+  //dotimage file
+  SDL_Rect clip;
   //constructor
   Dot();
   //destructor
   //~Dot();
   //handle the inputs the program gets and passes to the dot object
-  void handle_input(SDL_Event);
+  //void handle_input(SDL_Event);
   //update the position of the dot
   void move();
   //draw the dot onto the surface which is passed to the function
@@ -80,12 +81,12 @@ Dot::Dot(){
   xvel=9;
   yvel=0;
   phi=0;
-  dot = load_image("./dot.png");
-  /*if(color == "red"){
-    dot = load_image("./dotr.png");
-    }*/
+  dot = load_image("./dots.png");
   rect.h=DOT_HEIGHT;
   rect.w=DOT_WIDTH;
+  clip.x=0;
+  clip.w=5;
+  clip.h=5;
  }
 
 void Dot::store_path(int i){
@@ -110,7 +111,7 @@ void Dot::check_collision(int *path1,int *path2,int i){
 //Dot::~Dot(){}
 
 //handle input given be event
-void Dot::handle_input(SDL_Event event){
+/*void Dot::handle_input(SDL_Event event){
   //check whether it is a keydown event, otherwise do nothing
   if(event.type == SDL_KEYDOWN){
     //if its a keydown, react to different inputs by adjusting velocity
@@ -119,7 +120,7 @@ void Dot::handle_input(SDL_Event event){
     case SDLK_RIGHT: phi += 20; break;
     }
   }
-}
+  }*/
 
 //update the position of the dot according to the current velocity
 void Dot::move(){
@@ -137,19 +138,23 @@ void Dot::show(SDL_Surface* screen){
   //fill the rect just to mark its position on the screen
   SDL_FillRect(screen,&rect,SDL_MapRGB(screen->format,0x00,
                                       0xFF,0x00));
-  //substract 3 from x,y so that these coordinates define point
+  //substract 2 from x,y so that these coordinates point
   //to the midpoint of the image
-  //probably smarter to use an odd value like 5 where you can
-  //actually define the middle pixel ;)
-  apply_surface(x-3,y-3,dot,screen,NULL);
+  apply_surface(x-2,y-2,dot,screen,&clip);
 }
 
 void Dot::setcolor(std::string color){
-  if(color == "red"){
-    dot = load_image("./dotr.png");
-  }
   if(color == "green"){
-    dot = load_image("./dotg.png");
+    clip.y=0;
+  }
+  if(color == "red"){
+    clip.y=5;
+  }
+  if(color == "blue"){
+    clip.y=10;
+  }
+  if(color == "yellow"){
+    clip.y=15;
   }
 }
 

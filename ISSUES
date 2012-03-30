@@ -6,3 +6,5 @@
 -make id of class player private, figure out a way to correctly assign the id automatically
 -not possible to select other keys than letters
 -make dot class variables private
+-really hard to display the points, is there no easier way to switch from integer to string/char??
+-sometimes there is a left over from the startscreen on the playing field, no idea where that comes from
